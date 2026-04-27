@@ -16,14 +16,27 @@
 ## Canlı Demo
 [EKLENECEK]
 
-## Kurulum Talimatları
-1. Repoyu klonlayın:
-   ```bash
-   git clone <repo-url>
-   ```
-2. Gerekli bağımlılıkları yükleyin:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. `.env.example` dosyasını `.env` olarak kopyalayın ve içerisine kendi Google Gemini API anahtarınızı ekleyin.
-4. Uygulamayı çalıştırın (Ana kod `src/` dizinindedir).
+## Proje Yapısı
+- **/frontend**: React + Vite (Premium UI)
+- **/src/api.py**: FastAPI Backend
+- **/src/main.py**: CLI Test Script
+
+## Kurulum ve Çalıştırma
+
+### 1. Backend Hazırlığı
+```bash
+# Gerekli paketleri yükleyin
+pip install fastapi uvicorn google-generativeai python-dotenv
+# Backend'i başlatın
+python src/api.py
+```
+
+### 2. Frontend Hazırlığı
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### 3. API Anahtarı
+`.env` dosyasındaki `GEMINI_API_KEY` değeri otomatik olarak yapılandırılmıştır.
