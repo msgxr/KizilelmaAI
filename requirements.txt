@@ -1,4 +1,6 @@
-google-generativeai
+fastapi
+uvicorn[standard]
+google-genai
 python-dotenv
 langchain
 langgraph

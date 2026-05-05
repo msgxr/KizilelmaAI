@@ -1,34 +1,28 @@
 import os
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 
-# .env dosyasından çevre değişkenlerini yükle
 load_dotenv()
 
-# API anahtarını al
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 def main():
     if not GEMINI_API_KEY or GEMINI_API_KEY == "your_key_here":
-        print("Lütfen .env dosyası oluşturup geçerli bir GEMINI_API_KEY değeri girin.")
+        print("Lütfen .env dosyasına geçerli bir GEMINI_API_KEY değeri girin.")
         return
 
-    # Gemini API'yi yapılandır
-    genai.configure(api_key=GEMINI_API_KEY)
-    
-    # Modeli seç
-    model = genai.GenerativeModel('gemini-1.5-flash')
-    
+    client = genai.Client(api_key=GEMINI_API_KEY)
+
     print("KızılelmaAI sistemine hoş geldiniz! Gemini API ile bağlantı kuruluyor...\n")
-    
+
     try:
-        # Örnek bir prompt gönder
         prompt = "BTK Akademi Hackathon 2026 için motive edici, teknoloji odaklı kısa bir slogan yazar mısın?"
-        response = model.generate_content(prompt)
-        
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
         print("Soru:", prompt)
         print("\nGemini Yanıtı:\n", response.text)
-        
     except Exception as e:
         print("Bir hata oluştu:", e)
 

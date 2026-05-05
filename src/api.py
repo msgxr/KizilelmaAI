@@ -3,13 +3,12 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 
 load_dotenv()
 
 app = FastAPI()
 
-# CORS ayarları (Frontend'in bağlanabilmesi için)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,24 +17,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Gemini Yapılandırması
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-    model = genai.GenerativeModel('gemini-1.5-flash')
-else:
-    model = None
+client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
 class ChatRequest(BaseModel):
     message: str
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
-    if not model:
+    if not client:
         raise HTTPException(status_code=500, detail="Gemini API anahtarı bulunamadı.")
-    
     try:
-        response = model.generate_content(request.message)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=request.message,
+        )
         return {"response": response.text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
